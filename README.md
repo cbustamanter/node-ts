@@ -3,7 +3,7 @@
 - TypeScript
 - Node
 - Graphql
-- Mikro ORM
+- TypeORM
 - PostgreSQL
 - Express
 - Argon2
@@ -32,10 +32,6 @@ yarn start # same as dev but without nodemon
 
 ```bash
 yarn start2 # same as dev2 but without nodemon
-```
-
-```bash
-yarn create:migration # this will look up for migrations (if needed)
 ```
 
 # Requirements
