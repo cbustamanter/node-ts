@@ -17,10 +17,12 @@ import { MyContext } from "./types";
 
 const main = async () => {
   createConnection({
-    type: "postgres",
-    database: "crud-node2",
-    username: "postgres",
-    password: "postgres",
+    type: "mysql",
+    host: "localhost",
+    port: 3306,
+    database: "crud_node",
+    username: "root",
+    password: "root",
     synchronize: true,
     logging: true,
     entities: [Post, User],

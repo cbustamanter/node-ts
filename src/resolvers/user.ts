@@ -8,7 +8,6 @@ import validateRegister from "../utils/validateRegister";
 import { UserResponse } from "../utils/types/UserResponse";
 import { sendEmail } from "../utils/sendEmail";
 import { v4 } from "uuid";
-import { getConnection } from "typeorm";
 
 @Resolver()
 export class UserResolver {
@@ -19,31 +18,36 @@ export class UserResolver {
   ): Promise<UserResponse> {
     const errors = validateRegister(options);
     if (errors) {
-      return {};
+      return { errors };
     }
     const hashedPwd = await argon2.hash(options.password);
     let user;
     try {
-      const result = await getConnection()
-        .createQueryBuilder()
-        .insert()
-        .into(User)
-        .values({
-          username: options.username,
-          email: options.email,
-          password: hashedPwd,
-        })
-        .returning("*")
-        .execute();
-      user = result.raw[0];
+      const result = await User.create({
+        username: options.username,
+        email: options.email,
+        password: hashedPwd,
+      }).save();
+      // const result = await getConnection()
+      //   .createQueryBuilder()
+      //   .insert()
+      //   .into(User)
+      //   .values({
+      //     username: options.username,
+      //     email: options.email,
+      //     password: hashedPwd,
+      //   })
+      //   .returning("*")
+      //   .execute();
+      user = result;
     } catch (err) {
-      if (err.code === "23505") {
+      if (err.code === "ER_DUP_ENTRY") {
         return {
           errors: [{ field: "username", message: "User is already taken" }],
         };
       }
     }
-    req.session.userId = user.id;
+    req.session.userId = user?.id;
     return { user };
   }
 

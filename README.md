@@ -4,7 +4,7 @@
 - Node
 - Graphql
 - TypeORM
-- PostgreSQL
+- mysql
 - Express
 - Argon2
 - ioredis
@@ -36,7 +36,7 @@ yarn start2 # same as dev2 but without nodemon
 
 # Requirements
 
-- postgreSQL
+- mysql
 - redis
 - node (16.x)
 - yarn or npm
@@ -47,3 +47,10 @@ yarn start2 # same as dev2 but without nodemon
 2. yarn watch
 3. open new terminal
 4. yarn dev
+
+# To use PostgreSQL
+
+- add the "pg" module.
+- remove "mysql2" module.
+- change TypeORM config to use postgres.
+- There may be some changes on code (duplicate entries).
