@@ -16,7 +16,7 @@ export class Post extends EntityWithDates(EntityWithBase(BaseEntity)) {
 
   @Field()
   @Column({ type: "int", default: 0 })
-  ponts: number;
+  points: number;
 
   @Field()
   @Column()
