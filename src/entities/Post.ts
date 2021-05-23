@@ -16,12 +16,13 @@ export class Post extends EntityWithDates(EntityWithBase(BaseEntity)) {
 
   @Field()
   @Column({ type: "int", default: 0 })
-  points: number;
+  points!: number;
 
   @Field()
   @Column()
   creatorId!: number;
 
+  @Field()
   @ManyToOne(() => User, (creator) => creator.posts)
   creator: User;
 }

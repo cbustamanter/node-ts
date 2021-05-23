@@ -1,4 +1,12 @@
-import { Resolver, Ctx, Arg, Mutation, Query } from "type-graphql";
+import {
+  Resolver,
+  Ctx,
+  Arg,
+  Mutation,
+  Query,
+  FieldResolver,
+  Root,
+} from "type-graphql";
 import { User } from "../entities/User";
 import { MyContext } from "../types";
 import argon2 from "argon2";
@@ -9,8 +17,15 @@ import { UserResponse } from "../utils/types/UserResponse";
 import { sendEmail } from "../utils/sendEmail";
 import { v4 } from "uuid";
 
-@Resolver()
+@Resolver(User)
 export class UserResolver {
+  @FieldResolver()
+  email(@Root() user: User, @Ctx() { req }: MyContext) {
+    if (req.session.userId == user.id) {
+      return user.email;
+    }
+    return "";
+  }
   @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: UsernamePasswordInput,

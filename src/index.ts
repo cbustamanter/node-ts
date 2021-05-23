@@ -14,9 +14,10 @@ import { HelloResolver } from "./resolvers/hello";
 import { PostResolver } from "./resolvers/post";
 import { UserResolver } from "./resolvers/user";
 import { MyContext } from "./types";
+import path from "path";
 
 const main = async () => {
-  createConnection({
+  const conn = await createConnection({
     type: "mysql",
     host: "localhost",
     port: 3306,
@@ -25,6 +26,7 @@ const main = async () => {
     password: "root",
     synchronize: true,
     logging: true,
+    migrations: [path.join(__dirname, "./migrations/*")],
     entities: [Post, User],
   });
   const app = express();

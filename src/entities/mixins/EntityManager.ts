@@ -21,11 +21,11 @@ export function EntityWithBase<TBase extends Constructor>(Base: TBase) {
 export function EntityWithDates<TBase extends Constructor>(Base: TBase) {
   @ObjectType()
   abstract class AbstractBase extends Base {
-    @Field()
+    @Field(() => String)
     @CreateDateColumn()
     createdAt: Date;
 
-    @Field()
+    @Field(() => String)
     @UpdateDateColumn()
     updateAt: Date;
   }
