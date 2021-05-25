@@ -20,10 +20,10 @@ export class Post extends EntityWithDates(EntityWithBase(BaseEntity)) {
   points!: number;
 
   @Field(() => Int, { nullable: true })
-  @Column("int", {
-    nullable: true,
-    select: false,
-  }) // workaround to have  a computed column since it's not supported yet
+  // @Column("int", {
+  //   nullable: true,
+  //   select: false,
+  // }) // workaround to have  a computed column since it's not supported yet
   voteStatus: number | null; // 1 or -1 or null
 
   @Field()
