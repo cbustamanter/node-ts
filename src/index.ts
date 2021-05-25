@@ -5,6 +5,7 @@ import express from "express";
 import session from "express-session";
 import Redis from "ioredis";
 import "reflect-metadata";
+import "dotenv-safe/config";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
 import { COOKIE_NAME, __prod__ } from "./constants";
@@ -22,11 +23,7 @@ import { createUpdootLoader } from "./utils/createUpdootLoader";
 const main = async () => {
   await createConnection({
     type: "mysql",
-    host: "localhost",
-    port: 3306,
-    database: "crud_node",
-    username: "root",
-    password: "root",
+    url: process.env.DATABASE_URL,
     synchronize: true,
     logging: true,
     migrations: [path.join(__dirname, "./migrations/*")],
@@ -34,11 +31,12 @@ const main = async () => {
   });
   const app = express();
   const RedisStore = connectRedis(session);
-  const redis = new Redis();
+  const redis = new Redis(process.env.REDIS_URL);
+  app.set("trust proxy", 1);
   app.use(
     cors({
       credentials: true,
-      origin: "http://localhost:3000",
+      origin: process.env.CORS_ORIGIN,
     })
   );
   app.use(
@@ -53,8 +51,9 @@ const main = async () => {
         httpOnly: true,
         secure: __prod__,
         sameSite: "lax", //csrf
+        domain: __prod__ ? ".cbraggio.me" : undefined,
       },
-      secret: "awewewaewaewa",
+      secret: process.env.SESSION_SECRET,
       saveUninitialized: false,
       resave: false,
     })
@@ -76,8 +75,8 @@ const main = async () => {
     app,
     cors: false,
   });
-  app.listen(4000, () => {
-    console.log(`server started on port 4000`);
+  app.listen(parseInt(process.env.PORT), () => {
+    console.log(`server started on port ${process.env.PORT}`);
   });
 };
 
